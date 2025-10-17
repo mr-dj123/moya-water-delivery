@@ -3,6 +3,11 @@
 session_start();
 require_once "config.php"; // Assuming config.php is in the same directory
 
+// Disable caching so "Back" won't show logged-in pages after logout
+header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1
+header("Pragma: no-cache"); // HTTP 1.0
+header("Expires: 0"); // Proxies
+
 // Check if the user is logged in, if not then redirect to login page (index.html)
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location: index.html");

@@ -38,8 +38,7 @@ $sql_orders = "
         o.quantity, 
         o.total_amount, 
         o.status,
-        p.name AS product_name,
-        p.type AS product_type
+        p.name AS product_name
     FROM orders o
     JOIN products p ON o.product_id = p.id
     WHERE o.user_id = ?

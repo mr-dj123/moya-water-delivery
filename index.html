@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -55,22 +56,24 @@
 
         /* CTA Button (Orange/Gold) */
         .btn-cta {
-            background-color: var(--moya-cta);
-            border-color: var(--moya-cta);
-            color: #fff;
+            background-color: #007bff; /* Primary Blue */
+            border-color: #007bff;
+            color: #fff !important;
             font-weight: 700;
             padding: .75rem 2rem;
-            box-shadow: 0 4px 10px rgba(255, 153, 0, 0.4);
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
             transition: all 0.3s ease;
         }
 
         .btn-cta:hover {
-            background-color: #e68a00;
-            /* Darker orange */
-            border-color: #e68a00;
-            box-shadow: 0 10px 20px rgba(255, 153, 0, 0.6) !important;
+            background-color: #0056b3; /* Darker blue on hover */
+            border-color: #0056b3;
+            color: #fff !important; /* Keep text white on hover */
+            box-shadow: 0 10px 20px rgba(0, 123, 255, 0.5) !important;
             transform: translateY(-2px);
         }
+
+
 
         .card-shadow {
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 15px rgba(0, 0, 0, 0.03);
@@ -97,6 +100,16 @@
             text-align: center;
             border-radius: 0.75rem;
         }
+        .modal-header {
+            justify-content: center;
+            position: relative;
+        }
+
+        .modal-header .btn-close {
+            position: absolute;
+            right: 1rem;
+        }
+
     </style>
 </head>
 
@@ -106,7 +119,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
         <div class="container py-2">
             <!-- Logo: Moya -->
-            <a class="navbar-brand text-2xl fw-bold text-primary d-flex align-items-center" href="#">
+            <a class="navbar-brand text-2xl fw-bold text-primary d-flex align-items-center fs-3" href="#">
                 <!-- Water Drop Icon (Inline SVG) -->
                 <svg class="me-2 text-info" width="28" height="28" fill="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
@@ -136,7 +149,7 @@
                 </ul>
                 <!-- Login CTA in Nav -->
                 <button onclick="openLoginModal('nav')" class="btn btn-primary rounded-pill fw-semibold ms-lg-3 px-4">
-                    Login / Order
+                    Get Started
                 </button>
             </div>
         </div>
@@ -149,11 +162,11 @@
                 <!-- Text Content -->
                 <div class="col-md-7 order-md-1 order-2 text-center text-md-start pt-5">
                     <h1 class="display-4 fw-bolder lh-1 mb-3 text-gray-800">
-                        Ang Linis, Andito. <span class="text-primary d-block d-sm-inline">Fresh Water Delivery.</span>
+                        Share Life, Share Moya, <span class="text-primary d-block d-sm-inline">The Taste of Purity.</span>
                     </h1>
-                    <p class="lead text-secondary mb-4 mx-auto mx-md-0" style="max-width: 600px;">
-                        Premium mineral water delivered fast in **Rosario, La Union** (Barangay Cataguingtingan &
-                        In-Town). Order now and expect delivery in **1-2 hours**!
+                    <p class="lead text-secondary mb-4 mx-auto mx-md-0 text-black" style="max-width: 600px;">
+                        Premium mineral water delivered fast in <b>Rosario, La Union</b> (Barangay Cataguingtingan &
+                        In-Town). Order now and expect delivery in <b>1-2 hours</b>!
                     </p>
                     <div class="d-grid d-sm-flex gap-3 justify-content-center justify-content-md-start">
                         <!-- Primary CTA: Must require login first -->
@@ -169,8 +182,9 @@
                 </div>
                 <!-- Image/Placeholder -->
                 <div class="col-md-5 order-md-2 order-1 text-center">
-                    <img src="https://placehold.co/400x400/008080/ffffff?text=Moya+Delivery+Van"
-                        class="img-fluid rounded-4 shadow-lg" alt="Moya Water Delivery service van or illustration"
+                    <img src="img/delivery.png"
+                        class="img-fluid rounded-4 shadow-lg"
+                        alt="Moya Water Delivery service van or illustration"
                         onerror="this.src='https://placehold.co/400x400/008080/ffffff?text=Moya+Water'">
                 </div>
             </div>
@@ -180,9 +194,9 @@
     <!-- Product Showcase Section -->
     <section id="products" class="py-5 py-xl-10 bg-white">
         <div class="container">
-            <h2 class="display-6 fw-bold text-center mb-2">Our Gallon Options</h2>
-            <p class="text-center text-secondary mb-5 mx-auto" style="max-width: 700px;">
-                Choose the container that fits your home. Remember, you must **log in or sign up** to place an order.
+            <h2 class="display-6 fw-bold text-center mb-2" style="color: var(--moya-primary) !important;">Our Gallon Options</h2>
+            <p class="text-center text-secondary mb-5 mx-auto text-black" style="max-width: 700px;">
+                Choose the container that fits your home. Remember, you must <b>log in or sign up</b> to place an order.
             </p>
 
             <div class="row g-4 justify-content-center">
@@ -191,7 +205,7 @@
                 <div class="col-md-5">
                     <div
                         class="card p-4 rounded-4 card-shadow text-center h-100 border-2 border-transparent transition duration-300 hover-border-primary">
-                        <img src="https://placehold.co/250x350/e9f2ff/008080?text=Round+Water+Jug"
+                        <img src="img/round-water-jug.png"
                             alt="Standard Round water jug" class="mx-auto mb-3 product-img" style="max-width: 180px;">
                         <h3 class="h4 fw-semibold mb-2 text-gray-800">Standard Round Container</h3>
                         <p class="text-muted mb-3">The traditional and robust 5-gallon container.</p>
@@ -222,7 +236,7 @@
                 <div class="col-md-5">
                     <div
                         class="card p-4 rounded-4 card-shadow text-center h-100 border-2 border-transparent transition duration-300 hover-border-primary">
-                        <img src="https://placehold.co/250x350/e9f2ff/008080?text=Slim+Faucet+Jug"
+                        <img src="img/slim-water-gallon.jpg"
                             alt="Slim water container with built-in faucet" class="mx-auto mb-3 product-img"
                             style="max-width: 180px;">
                         <h3 class="h4 fw-semibold mb-2 text-gray-800">Slim Container with Faucet</h3>
@@ -255,7 +269,7 @@
     <!-- Delivery Process & Schedule Section -->
     <section id="process" class="py-5 py-xl-10" style="background-color: #e9f2ff;">
         <div class="container">
-            <h2 class="display-6 fw-bold text-center mb-5">Delivery Promise & Schedule</h2>
+            <h2 class="display-6 fw-bold text-center mb-5" style="color: var(--moya-primary) !important;">Delivery Promise & Schedule</h2>
             <div class="row g-4 text-center">
 
                 <!-- Step 1: Schedule -->
@@ -268,8 +282,8 @@
                         </svg>
                         <h3 class="h5 fw-bold text-gray-800">Operating Hours</h3>
                         <p class="text-secondary mb-0">
-                            **8:00 AM - 4:00 PM** daily. <br>
-                            *Last orders accepted at 4:00 PM.*
+                            <b>8:00 AM - 4:00 PM</b> daily. <br>
+                            <b>Last orders accepted at 4:00 PM.</b>
                         </p>
                     </div>
                 </div>
@@ -286,9 +300,9 @@
                         </svg>
                         <h3 class="h5 fw-bold text-gray-800">Guaranteed Fast Delivery</h3>
                         <p class="text-secondary mb-0">
-                            Delivery is **within the day**, typically arriving **1-2 hours** after your order is
+                            Delivery is <b>within the day</b>, typically arriving <b>1-2 hours</b> after your order is
                             confirmed. <br>
-                            *Last delivery run ends at 5:00 PM.*
+                            <b>Last delivery run ends at 5:00 PM.</b>
                         </p>
                     </div>
                 </div>
@@ -303,7 +317,7 @@
                         </svg>
                         <h3 class="h5 fw-bold text-gray-800">Payment Method</h3>
                         <p class="text-secondary mb-0">
-                            We accept **Cash on Delivery (COD)** only. Please prepare the exact amount for a smooth
+                            We accept <b>Cash on Delivery (COD)</b> only. Please prepare the exact amount for a smooth
                             transaction.
                         </p>
                     </div>
@@ -319,13 +333,13 @@
                 <div class="col-lg-6 mb-4 mb-lg-0">
                     <h2 class="display-6 fw-bold mb-3">Service Area: Rosario, La Union</h2>
                     <p class="lead text-secondary mb-4">
-                        We proudly serve our local community in **Barangay Cataguingtingan** and surrounding **In-Town
-                        areas** only. Please check the map to ensure your location is within our service zone.
+                        We proudly serve our local community in <b>Barangay Cataguingtingan</b> and surrounding <b>In-Town
+                        areas</b> only. Please check the map to ensure your location is within our service zone.
                     </p>
                     <button onclick="openLoginModal('check-location')" class="btn btn-primary rounded-pill fw-semibold">
                         Confirm My Delivery Address
                     </button>
-                    <p class="small text-muted mt-3">*Map integration will be fully functional in the backend phase.*
+                    <p class="small text-muted mt-3"><b>Map integration will be fully functional in the backend phase.</b>
                     </p>
                 </div>
                 <div class="col-lg-6">
@@ -353,14 +367,10 @@
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content rounded-4 card-shadow">
                 <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold text-gray-800" id="authModalLabel">Welcome to Moya!</h5>
+                    <h5 class="modal-title fw-bold text-gray-800 fs-3" id="authModalLabel " style="color: var(--moya-primary) !important;">Welcome to Moya!</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-
-                    <p class="small text-center text-danger fw-bold">Login or Sign Up is REQUIRED to access the order
-                        form.</p>
-
                     <!-- Tab Navigation -->
                     <ul class="nav nav-tabs mb-3" id="authTabs" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -385,17 +395,17 @@
                             <form action="login.php" method="POST" onsubmit="return mockLogin(event)">
                                 <div class="mb-3">
                                     <label for="loginEmail"
-                                        class="form-label small fw-semibold text-secondary">Email</label>
+                                        class="form-label small fw-semibold text-secondary text-black">Email</label>
                                     <input type="email" class="form-control rounded-3 p-3" id="loginEmail" name="email"
-                                        placeholder="your@email.com" required>
+                                        placeholder="johndoe@email.com" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="loginPassword"
-                                        class="form-label small fw-semibold text-secondary">Password</label>
+                                        class="form-label small fw-semibold text-secondary text-black">Password</label>
                                     <input type="password" class="form-control rounded-3 p-3" id="loginPassword"
                                         name="password" placeholder="********" required>
                                 </div>
-                                <button type="submit" class="btn btn-primary rounded-pill shadow-sm w-100 mt-3">
+                                <button type="submit" class="btn btn-cta rounded-pill shadow-sm w-100 mt-3">
                                     Log In
                                 </button>
                             </form>
@@ -404,61 +414,70 @@
                         <!-- Sign Up Form (Updated to include full user data) -->
                         <div class="tab-pane fade" id="signup-pane" role="tabpanel" aria-labelledby="signup-tab"
                             tabindex="0">
-                            <form action="signup.php" method="POST">
+                            <form action="signup.php" method="POST" class="needs-validation" novalidate>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label for="signupName" class="form-label small fw-semibold text-secondary">Full
-                                            Name</label>
-                                        <input type="text" class="form-control rounded-3 p-3" id="signupName"
-                                            name="full_name" required>
+                                        <label for="signupName" class="form-label small fw-semibold text-secondary text-black">Full Name</label>
+                                        <input type="text" class="form-control rounded-3 p-3" id="signupName" name="full_name"
+                                            pattern="^[A-Za-z\s]{2,}$"
+                                            title="Name should only contain letters and spaces." placeholder="John Doe" required>
+                                        <div class="invalid-feedback">Please enter your full name (letters only).</div>
+                                        <div class="valid-feedback">Looks good!</div>
                                     </div>
+
                                     <div class="col-md-6 mb-3">
-                                        <label for="signupPhone"
-                                            class="form-label small fw-semibold text-secondary">Phone Number</label>
-                                        <input type="tel" class="form-control rounded-3 p-3" id="signupPhone"
-                                            name="phone_number" placeholder="09xxxxxxxxx" required>
+                                        <label for="signupPhone" class="form-label small fw-semibold text-secondary text-black">Phone Number</label>
+                                        <input type="tel" class="form-control rounded-3 p-3" id="signupPhone" name="phone_number"
+                                            pattern="^09\d{9}$" 
+                                            title="Enter a valid Philippine phone number (e.g., 09123456789)"
+                                            placeholder="09123456789" required>
+                                        <div class="invalid-feedback">Enter a valid 11-digit number starting with 09.</div>
+                                        <div class="valid-feedback">Valid phone number!</div>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label for="signupEmail"
-                                            class="form-label small fw-semibold text-secondary">Email Address</label>
-                                        <input type="email" class="form-control rounded-3 p-3" id="signupEmail"
-                                            name="email" required>
+                                        <label for="signupEmail" class="form-label small fw-semibold text-secondary text-black">Email Address</label>
+                                        <input type="email" class="form-control rounded-3 p-3" id="signupEmail" name="email" placeholder="johndoe@gmail.com" required>
+                                        <div class="invalid-feedback">Please enter a valid email address.</div>
+                                        <div class="valid-feedback">Valid email!</div>
                                     </div>
+
                                     <div class="col-md-6 mb-3">
-                                        <label for="signupPassword"
-                                            class="form-label small fw-semibold text-secondary">Password</label>
-                                        <input type="password" class="form-control rounded-3 p-3" id="signupPassword"
-                                            name="password" required>
+                                        <label for="signupPassword" class="form-label small fw-semibold text-secondary text-black">Password</label>
+                                        <input type="password" class="form-control rounded-3 p-3" id="signupPassword" name="password"
+                                            minlength="8" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+                                            title="Password must be at least 8 characters and contain at least one number." placeholder="●●●●●●●●"
+                                            required>
+                                        <div class="invalid-feedback">Must be 8+ chars with at least one number.</div>
+                                        <div class="valid-feedback">Strong password!</div>
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="signupBarangay"
-                                        class="form-label small fw-semibold text-secondary">Delivery Barangay (In-Town
-                                        Service Area)</label>
-                                    <select class="form-select rounded-3 p-3" id="signupBarangay"
-                                        name="address_barangay" required>
+                                    <label for="signupBarangay" class="form-label small fw-semibold text-secondary text-black">
+                                        Delivery Barangay (In-Town Service Area)
+                                    </label>
+                                    <select class="form-select rounded-3 p-3" id="signupBarangay" name="address_barangay" required>
                                         <option value="" disabled selected>Select your delivery area...</option>
                                         <option value="Cataguingtingan">Cataguingtingan</option>
                                         <option value="In-Town">In-Town (Other Rosario Poblacion)</option>
                                     </select>
+                                    <div class="invalid-feedback">Please select your delivery barangay.</div>
+                                    <div class="valid-feedback">Selected!</div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="signupAddressDetail"
-                                        class="form-label small fw-semibold text-secondary">House/Street/Landmark
-                                        Details</label>
-                                    <input type="text" class="form-control rounded-3 p-3" id="signupAddressDetail"
-                                        name="address_detail" required>
+                                    <label for="signupAddressDetail" class="form-label small fw-semibold text-secondary text-black">
+                                        House/Street/Landmark Details
+                                    </label>
+                                    <input type="text" class="form-control rounded-3 p-3" id="signupAddressDetail" name="address_detail" required>
+                                    <div class="invalid-feedback">Please provide your house or street details.</div>
+                                    <div class="valid-feedback">Looks good!</div>
                                 </div>
 
-
-                                <button type="submit" class="btn btn-cta rounded-pill shadow-sm w-100 mt-3">
-                                    Create Account
-                                </button>
+                                <button type="submit" class="btn btn-cta rounded-pill shadow-sm w-100 mt-3">Create Account</button>
                             </form>
                         </div>
                     </div>
@@ -493,6 +512,59 @@
             alert('Form submitted to login.php. Check your browser console or network tab for the request.');
             return true; // Allows the form to submit to login.php
         }
+
+        (function () {
+            'use strict'
+            const forms = document.querySelectorAll('.needs-validation')
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+        (function () {
+            'use strict';
+            const form = document.querySelector('.needs-validation');
+            const inputs = form.querySelectorAll('input, select');
+
+            // Prevent submission if invalid
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+
+            // Real-time validation while typing or changing
+            inputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    if (input.checkValidity()) {
+                        input.classList.remove('is-invalid');
+                        input.classList.add('is-valid');
+                    } else {
+                        input.classList.remove('is-valid');
+                        input.classList.add('is-invalid');
+                    }
+                });
+
+                input.addEventListener('blur', () => {
+                    if (input.value.trim() !== '') {
+                        if (input.checkValidity()) {
+                            input.classList.add('is-valid');
+                            input.classList.remove('is-invalid');
+                        } else {
+                            input.classList.add('is-invalid');
+                            input.classList.remove('is-valid');
+                        }
+                    }
+                });
+            });
+        })();     
     </script>
 
 </body>

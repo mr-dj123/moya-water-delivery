@@ -41,15 +41,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if (mysqli_stmt_fetch($stmt)) {
                         // Verify the password
                         if (password_verify($password, $hashed_password)) {
-                            
-                            // Password is correct, store data in session
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
                             $_SESSION["full_name"] = $full_name;
                             $_SESSION["address_barangay"] = $address_barangay;
 
-                            // Redirect user to the main ordering page
-                            header("location: order.php"); 
+                            // Add this line to redirect to index.html
+                            header("location: home.php");
                             exit;
                         } else {
                             // Password is not valid
