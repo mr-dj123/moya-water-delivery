@@ -18,13 +18,23 @@ $user_id = $_SESSION["id"];
 $user_name = htmlspecialchars($_SESSION["full_name"]);
 $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
 
-// --- 1. Fetch Product Prices from Database ---
-$prices = [];
-$sql_prices = "SELECT id, name, price FROM products WHERE name IN ('Refill', 'New Container')";
+// --- 1. Fetch Product Data (ID and Price) from Database ---
+$product_data = [];
+$product_names = [
+    'Standard Round Refill', 
+    'Slim Container Refill', 
+    'New Standard Round', 
+    'New Slim Container'
+];
+$product_names_str = "'" . implode("','", $product_names) . "'"; // Formats: 'Name1','Name2',...
+
+// Fetch the prices and IDs for all four specific product names
+$sql_prices = "SELECT id, name, price FROM products WHERE name IN ($product_names_str)";
 
 if ($result_prices = mysqli_query($conn, $sql_prices)) {
     while ($row = mysqli_fetch_assoc($result_prices)) {
-        $prices[$row['name']] = [
+        // Store product ID and price using the full name as the key
+        $product_data[$row['name']] = [
             'id' => $row['id'],
             'price' => (float)$row['price']
         ];
@@ -32,12 +42,15 @@ if ($result_prices = mysqli_query($conn, $sql_prices)) {
     mysqli_free_result($result_prices);
 }
 
-// Assign fetched prices
-$refill_product_id = $prices['Refill']['id'] ?? 1;
-$refill_price = $prices['Refill']['price'] ?? 20.00;
+// Assign fetched prices (for display) and IDs (for submission)
+$refill_price = $product_data['Standard Round Refill']['price'] ?? 20.00;
+$new_container_price = $product_data['New Standard Round']['price'] ?? 120.00;
 
-$new_container_product_id = $prices['New Container']['id'] ?? 2;
-$new_container_price = $prices['New Container']['price'] ?? 120.00;
+// Assign IDs (CRITICAL for place_order.php to identify the items)
+$id_refill_round = $product_data['Standard Round Refill']['id'] ?? 1;
+$id_refill_slim = $product_data['Slim Container Refill']['id'] ?? 2;
+$id_new_round = $product_data['New Standard Round']['id'] ?? 3;
+$id_new_slim = $product_data['New Slim Container']['id'] ?? 4;
 
 // Close database connection
 mysqli_close($conn);
@@ -168,6 +181,10 @@ mysqli_close($conn);
                 <input type="hidden" name="total_amount" id="totalAmountInput" value="0.00">
                 <input type="hidden" name="quantity" id="quantityInput" value="0">
 
+                <input type="hidden" name="refill_round_id" value="<?php echo $id_refill_round; ?>">
+                <input type="hidden" name="refill_slim_id" value="<?php echo $id_refill_slim; ?>">
+                <input type="hidden" name="new_round_id" value="<?php echo $id_new_round; ?>">
+                <input type="hidden" name="new_slim_id" value="<?php echo $id_new_slim; ?>">
                 <h3 class="text-primary fw-bold mb-3">Water Refills</h3>
                 <div class="row">
                     <div class="col-md-6 mb-4">
@@ -384,6 +401,8 @@ mysqli_close($conn);
                 case 'new_slim':
                     input = newSlimQtyInput;
                     break;
+                default:
+                    return; // Should not happen
             }
 
             if (!input) return; // Safety check

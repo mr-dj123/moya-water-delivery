@@ -161,7 +161,7 @@ $order_total = isset($_GET['total']) ? (float)$_GET['total'] : 0;
                                         <td><?php echo date("M d, Y", strtotime(htmlspecialchars($order['order_date']))); ?></td>
                                         <td>
                                             <span class="fw-medium"><?php echo htmlspecialchars($order['product_name']); ?></span>
-                                            <br><span class="badge bg-light text-secondary border border-secondary"><?php echo htmlspecialchars($order['product_type']); ?></span>
+                                            <br><span class="badge bg-light text-secondary border border-secondary"><?php echo htmlspecialchars($order['product_type'] ?? ''); ?></span>
                                         </td>
                                         <td><?php echo htmlspecialchars($order['quantity']); ?> gal</td>
                                         <td class="fw-bold text-success">₱<?php echo number_format(htmlspecialchars($order['total_amount']), 2); ?></td>
