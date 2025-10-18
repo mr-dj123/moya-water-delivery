@@ -187,6 +187,94 @@ $user_name = htmlspecialchars($_SESSION["full_name"]);
         </div>
     </section>
 
+    <!-- Delivery Process & Schedule Section -->
+    <section id="process" class="py-5 py-xl-10" style="background-color: #e9f2ff;">
+        <div class="container">
+            <h2 class="display-6 fw-bold text-center mb-5" style="color: var(--moya-primary) !important;">Delivery Promise & Schedule</h2>
+            <div class="row g-4 text-center">
+
+                <!-- Step 1: Schedule -->
+                <div class="col-md-4">
+                    <div class="p-4 bg-white rounded-4 card-shadow h-100">
+                        <svg class="mb-3 text-primary" width="48" height="48" fill="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 15h2v2h-2zm0-8h2v6h-2z" />
+                        </svg>
+                        <h3 class="h5 fw-bold text-gray-800">Operating Hours</h3>
+                        <p class="text-secondary mb-0">
+                            <b>8:00 AM - 4:00 PM</b> daily. <br>
+                            <b>Last orders accepted at 4:00 PM.</b>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2: Delivery Speed -->
+                <div class="col-md-4">
+                    <div class="p-4 bg-white rounded-4 card-shadow h-100">
+                        <svg class="mb-3 text-cta" width="48" height="48" fill="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M21 13v-2h-3V8h-2v3h-2v-3h-2v3h-2v-3H8v5h2v-3h2v3h2v-3h2v3h3zm-8-5h2V6h-2v2zm-4 0h2V6H9v2zm8 0h2V6h-2v2z" />
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                        </svg>
+                        <h3 class="h5 fw-bold text-gray-800">Guaranteed Fast Delivery</h3>
+                        <p class="text-secondary mb-0">
+                            Delivery is <b>within the day</b>, typically arriving <b>1-2 hours</b> after your order is
+                            confirmed. <br>
+                            <b>Last delivery run ends at 5:00 PM.</b>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 3: Payment -->
+                <div class="col-md-4">
+                    <div class="p-4 bg-white rounded-4 card-shadow h-100">
+                        <svg class="mb-3 text-success" width="48" height="48" fill="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h18v8zm-5-3c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+                        </svg>
+                        <h3 class="h5 fw-bold text-gray-800">Payment Method</h3>
+                        <p class="text-secondary mb-0">
+                            We accept <b>Cash on Delivery (COD)</b> only. Please prepare the exact amount for a smooth
+                            transaction.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Area Section (Map Integration Placeholder) -->
+    <section id="location" class="py-5 py-xl-10">
+        <div class="container">
+            <div class="row align-items-center gx-5">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h2 class="display-6 fw-bold mb-3">Service Area: Rosario, La Union</h2>
+                    <p class="lead text-secondary mb-4">
+                        We proudly serve our local community in <b>Barangay Cataguingtingan</b> and surrounding <b>In-Town
+                        areas</b> only. Please check the map to ensure your location is within our service zone.
+                    </p>
+                    <button onclick="openLoginModal('check-location')" class="btn btn-primary rounded-pill fw-semibold">
+                        Confirm My Delivery Address
+                    </button>
+                    <p class="small text-muted mt-3"><b>Map integration will be fully functional in the backend phase.</b>
+                    </p>
+                </div>
+                <div class="col-lg-6">
+                    <!-- Map Placeholder -->
+                    <div class="map-placeholder rounded-4 card-shadow">
+                        <p class="fw-bold text-primary">MAP INTEGRATION (Placeholder)<br><span
+                                class="fw-normal small text-secondary">Google Maps API will be used here to confirm
+                                location during checkout.</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
