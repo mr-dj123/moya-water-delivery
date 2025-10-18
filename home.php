@@ -45,6 +45,7 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
             background-color: var(--moya-bg);
             color: #1f2937;
         }
+        /* ... (all your other styles) ... */
         .hero-bg {
             background-image: linear-gradient(to bottom right, #ffffff, var(--moya-bg));
         }
@@ -272,43 +273,46 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
     <script>
         // --- GLOBAL VARIABLES ---
         
-        // --- NEW: This is your single source of truth for barangay data ---
-        // This list comes directly from the data you provided.
-        const barangayData = [
-            {coords: [16.2195, 120.4940], name: "Cataguingtingan"},
-            {coords: [16.2135, 120.5018], name: "Damortis"},
-            {coords: [16.2250, 120.5039], name: "Concepcion"},
-            {coords: [16.2466, 120.4879], name: "Rabon"},
-            {coords: [16.2399, 120.4687], name: "Bacani"},
-            {coords: [16.2288, 120.4597], name: "Carunuan West"},
-            {coords: [16.2390, 120.4557], name: "Carunuan East"},
-            {coords: [16.2482, 120.4538], name: "Palakipak"},
-            {coords: [16.2551, 120.4693], name: "Bani"},
-            {coords: [16.2650, 120.4456], name: "Alipang"},
-            {coords: [16.2244, 120.4501], name: "Bentres-Salud"},
-            {coords: [16.2207, 120.4688], name: "Cadumanian 1"},
-            {coords: [16.2150, 120.4684], name: "Cadumanian 2"},
-            {coords: [16.2144, 120.4913], name: "Lingsat"},
-            {coords: [16.2111, 120.4841], name: "Nagsabaran"},
-            {coords: [16.2366, 120.4311], name: "Ambangonan"},
-            {coords: [16.2347, 120.4216], name: "Gumot"},
-            {coords: [16.2322, 120.4078], name: "Bangar"},
-            {coords: [16.2207, 120.4123], name: "Casiam"},
-            {coords: [16.2424, 120.4046], name: "Camp One"}
+        // This is your complete list of 28 delivery points (the BLUE pins).
+        const serviceAreaPoints = [
+            [16.219468, 120.493981], [16.213475, 120.501831], [16.225049, 120.503922],
+            [16.246571, 120.487866], [16.239948, 120.468656], [16.228787, 120.459740],
+            [16.238981, 120.455706], [16.248206, 120.453848], [16.255083, 120.469280],
+            [16.265017, 120.445564], [16.224417, 120.450107], [16.220696, 120.468793],
+            [16.214975, 120.468423], [16.214365, 120.491307], [16.211052, 120.484091],
+            [16.236634, 120.431094], [16.234697, 120.421645], [16.232188, 120.407840],
+            [16.220671, 120.412298], [16.242430, 120.404603], [16.250993, 120.429892],
+            [16.266720, 120.408259], [16.281248, 120.443265], [16.268898, 120.475935],
+            [16.249906, 120.495360], [16.277226, 120.489522], [16.281798, 120.488149],
+            [16.214498, 120.429782]
         ];
 
-        // --- NEW: Automatically generate the variables from barangayData ---
-        
-        // 1. Just the coordinates (for the blue pins)
-        const serviceAreaPoints = barangayData.map(item => item.coords);
-        
-        // 2. The name-to-coordinate lookup table
-        const barangayCoordinateLookup = barangayData.reduce((acc, item) => {
-            acc[item.name] = item.coords; // e.g., "Cataguingtingan": [16.2195, 120.4940]
-            return acc;
-        }, {});
-        
-        // -----------------------------------------------------------------
+        // --- NEW: BARANGAY COORDINATE LOOKUP TABLE ---
+        //
+        // !!! ---== [ ACTION REQUIRED ] ==--- !!!
+        //
+        // You MUST fill this table with your actual barangay names.
+        // The names must EXACTLY match what is in your database.
+        //
+        // HOW:
+        // 1. Find the name (e.g., "Nangramboan").
+        // 2. Find its coordinates from the `serviceAreaPoints` list above.
+        // 3. Add them to this table.
+        //
+        const barangayCoordinateLookup = {
+            // Example:
+            // "Nangramboan": [16.219468, 120.493981], 
+            
+            // --- TODO: Find the REAL coordinates for Cataguingtingan from the list above ---
+            "Cataguingtingan": [16.239948, 120.468656], // <-- THIS IS A GUESS! Please replace it with the real one.
+            
+            // --- TODO: Add all your other barangays ---
+            "Poblacion": [16.213475, 120.501831],         // This is a DEMO
+            "Bani": [16.239948, 120.468656]               // This is a DEMO
+        };
+        //
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //
 
         // --- Get the user's barangay from PHP ---
         const USER_BARANGAY_NAME = <?php echo json_encode($user_barangay); ?>;
@@ -323,10 +327,8 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(mainMap);
 
-            // Add a blue pin for every barangay in our service list
-            barangayData.forEach(barangay => {
-                L.marker(barangay.coords).addTo(mainMap)
-                   .bindPopup('<b>We deliver here!</b><br>' + barangay.name);
+            serviceAreaPoints.forEach(coords => {
+                L.marker(coords).addTo(mainMap).bindPopup('This is within our delivery area. We can deliver here!');
             });
         });
 
@@ -346,9 +348,8 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(modalMap);
                 
                 // Add all BLUE service area markers to the modal map
-                barangayData.forEach(barangay => {
-                    L.marker(barangay.coords).addTo(modalMap)
-                       .bindPopup(barangay.name);
+                serviceAreaPoints.forEach(coords => {
+                    L.marker(coords).addTo(modalMap);
                 });
             }
             modalMap.invalidateSize(); // Fixes map sizing
@@ -363,7 +364,6 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
             statusDiv.innerHTML = ""; // Clear old text
 
             // 1. Find the coordinates for the user's registered barangay
-            // The name (USER_BARANGAY_NAME) must EXACTLY match a name in the list
             const userCoords = barangayCoordinateLookup[USER_BARANGAY_NAME];
 
             if (userCoords) {
@@ -388,13 +388,29 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
                 modalMap.setView(userCoords, 15); // Center map on user's barangay
                 userMarker.bindPopup('<b>Your Registered Barangay:</b><br>' + USER_BARANGAY_NAME).openPopup();
 
-                // 3. The check is simple: if we found it, it's in the delivery zone.
-                statusDiv.innerHTML = '<span class="text-success">Great! Your registered barangay is within our delivery area.</span>';
+                // 3. Check if these coordinates are in our delivery zone
+                if (isInsideDeliveryZone(userCoords)) {
+                    statusDiv.innerHTML = '<span class="text-success">Great! Your registered barangay is within our delivery area.</span>';
+                } else {
+                    statusDiv.innerHTML = '<span class="text-danger">Sorry, your registered barangay is outside our service area.</span>';
+                }
 
             } else {
                 // 4. We could not find the barangay name in our lookup table.
-                statusDiv.innerHTML = '<span class="text-danger">Sorry, your registered barangay ("' + USER_BARANGAY_NAME + '") is not on our delivery list.</span>';
+                statusDiv.innerHTML = '<span class="text-danger">Sorry, we could not find your barangay "' + USER_BARANGAY_NAME + '" in our system. Please check your profile address.</span>';
             }
+        }
+
+        // This function checks if the user's coords are "close enough" to any service point
+        function isInsideDeliveryZone(userCoords) {
+            // This checks if the user's coordinates are *exactly* one of the service points.
+            // This is safer than a radius check.
+            for (const point of serviceAreaPoints) {
+                if (point[0] === userCoords[0] && point[1] === userCoords[1]) {
+                    return true; // The user's barangay is one of the service points
+                }
+            }
+            return false; // Not found in the list
         }
 
     </script>
