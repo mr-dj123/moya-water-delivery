@@ -9,6 +9,13 @@ require_once "config.php";
 $email = $password = "";
 $error_message = "";
 
+if (!function_exists('sanitize_input')) {
+    function sanitize_input($conn, $data) {
+        return htmlspecialchars(mysqli_real_escape_string($conn, trim($data)));
+    }
+}
+
+
 // Check if the form was submitted via POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -24,8 +31,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Attempt to process login if no basic errors
     if (empty($error_message)) {
-        // Prepare a select statement to fetch the user by email
-        $sql = "SELECT id, full_name, password_hash, address_barangay FROM users WHERE email = ?";
+        // Select statement to fetch the user by email
+        $sql = "SELECT id, full_name, password_hash, address_barangay, is_admin FROM users WHERE email = ?";
+
 
         if ($stmt = mysqli_prepare($conn, $sql)) {
             mysqli_stmt_bind_param($stmt, "s", $param_email);
@@ -36,37 +44,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 // Check if email exists
                 if (mysqli_stmt_num_rows($stmt) == 1) {
-                    mysqli_stmt_bind_result($stmt, $id, $full_name, $hashed_password, $address_barangay);
+                    mysqli_stmt_bind_result($stmt, $id, $full_name, $hashed_password, $address_barangay, $is_admin);
                     
                     if (mysqli_stmt_fetch($stmt)) {
                         // Verify the password
                         if (password_verify($password, $hashed_password)) {
+                            // Store session variables
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
                             $_SESSION["full_name"] = $full_name;
                             $_SESSION["address_barangay"] = $address_barangay;
+                            $_SESSION["is_admin"] = $is_admin;
 
-                            // Add this line to redirect to index.html
-                            header("location: home.php");
+                            // Check if the user is an admin
+                            $_SESSION["is_admin"] = $is_admin; // assuming $is_admin comes from your DB table
+                            if ($is_admin) {
+                                header("location: admin/dashboard.php");
+                            } else {
+                                header("location: home.php");
+                            }
                             exit;
                         } else {
-                            // Password is not valid
                             $error_message = "The email or password you entered is incorrect.";
                         }
                     }
                 } else {
-                    // Email doesn't exist
                     $error_message = "The email or password you entered is incorrect.";
                 }
             } else {
-                // Database execution error
                 $error_message = "Oops! Something went wrong with the database. Please try again later.";
             }
 
             mysqli_stmt_close($stmt);
         }
     }
-    
+
     // If login failed, show the error message (for simple testing)
     if (!empty($error_message)) {
         echo "<h2>Login Failed</h2>";

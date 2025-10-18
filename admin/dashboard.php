@@ -5,7 +5,7 @@ require_once "../config.php"; // Path is relative to the admin directory
 
 // Check if user is logged in AND is an admin
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || !isset($_SESSION["is_admin"]) || $_SESSION["is_admin"] !== true) {
-    header("location: login.php");
+    header("location: moya-water-delivery/login.php");
     exit;
 }
 

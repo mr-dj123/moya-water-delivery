@@ -27,7 +27,8 @@ $user_name = htmlspecialchars($_SESSION["full_name"]);
     <!-- Fonts and Bootstrap -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.5/dist/leaflet.css" integrity="sha256-sA+4RmXyFQfT5Vwy3Q8Z3FzZ1LhPQ2R9gqM1kz8A+R0=" crossorigin=""/>
     <style>
         :root {
             --moya-primary: #008080;
@@ -263,12 +264,10 @@ $user_name = htmlspecialchars($_SESSION["full_name"]);
                     <p class="small text-muted mt-3"><b>Map integration will be fully functional in the backend phase.</b>
                     </p>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-6 h-100">
                     <!-- Map Placeholder -->
-                    <div class="map-placeholder rounded-4 card-shadow">
-                        <p class="fw-bold text-primary">MAP INTEGRATION (Placeholder)<br><span
-                                class="fw-normal small text-secondary">Google Maps API will be used here to confirm
-                                location during checkout.</span></p>
+                    <div id="checkout-map" class="map-placeholder rounded-4 card-shadow" style="height: 400px;">
+                        <!-- Map will appear here -->
                     </div>
                 </div>
             </div>
@@ -276,5 +275,29 @@ $user_name = htmlspecialchars($_SESSION["full_name"]);
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.5/dist/leaflet.js" integrity="sha256-VL+0+rrJbMcYDf4uNlhE+FJpUkaWkjP8XjCl8dT/2eM=" crossorigin=""></script>
+    <script>
+        // Initialize map
+        var map = L.map('checkout-map').setView([14.5995, 120.9842], 13); // Example: Manila coordinates
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Add a marker at the center
+        var marker = L.marker([14.5995, 120.9842]).addTo(map)
+            .bindPopup('Your selected location.')
+            .openPopup();
+
+        // Optional: Allow user to click to move the marker
+        map.on('click', function(e) {
+            marker.setLatLng(e.latlng)
+                    .bindPopup('Selected location: ' + e.latlng.lat.toFixed(5) + ', ' + e.latlng.lng.toFixed(5))
+                    .openPopup();
+        });
+    </script>
 </body>
 </html>
