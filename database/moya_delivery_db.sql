@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 17, 2025 at 10:19 PM
+-- Generation Time: Oct 19, 2025 at 05:52 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -24,21 +24,23 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `admin`
+-- Table structure for table `admins`
 --
 
-CREATE TABLE `admin` (
-  `admin_id` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `password_hash` varchar(255) NOT NULL,
+CREATE TABLE `admins` (
+  `id` int(11) NOT NULL,
+  `full_name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `full_name` varchar(100) DEFAULT NULL,
-  `role` enum('superadmin','admin','staff') DEFAULT 'admin',
-  `last_login` datetime DEFAULT NULL,
-  `status` enum('active','inactive','banned') DEFAULT 'active',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `password_hash` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `admins`
+--
+
+INSERT INTO `admins` (`id`, `full_name`, `email`, `password_hash`, `created_at`) VALUES
+(1, 'Moya Administrator', 'admin@moya.com', '$2y$10$vYgT6e.xZkL2.VbS.sN2Uu7H6x/jZ0wP3/dD9gRzG3qP4cI5eK/7W', '2025-10-19 15:25:56');
 
 -- --------------------------------------------------------
 
@@ -55,6 +57,23 @@ CREATE TABLE `orders` (
   `order_date` datetime DEFAULT current_timestamp(),
   `status` enum('Pending','Processing','Completed','Cancelled') DEFAULT 'Pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `user_id`, `product_id`, `quantity`, `total_amount`, `order_date`, `status`) VALUES
+(1, 1, 3, 1, 20.00, '2025-10-18 20:00:07', 'Pending'),
+(2, 1, 4, 1, 20.00, '2025-10-18 20:00:07', 'Pending'),
+(3, 1, 5, 1, 120.00, '2025-10-18 20:00:07', 'Pending'),
+(4, 1, 6, 1, 120.00, '2025-10-18 20:00:07', 'Pending'),
+(5, 1, 3, 1, 20.00, '2025-10-18 20:02:53', 'Pending'),
+(6, 1, 4, 1, 20.00, '2025-10-18 20:02:53', 'Pending'),
+(7, 1, 5, 1, 120.00, '2025-10-18 20:02:53', 'Pending'),
+(8, 1, 6, 1, 120.00, '2025-10-18 20:02:53', 'Pending'),
+(9, 1, 5, 2, 240.00, '2025-10-18 23:07:46', 'Pending'),
+(10, 1, 3, 1, 20.00, '2025-10-18 23:08:44', 'Pending'),
+(11, 1, 6, 2, 240.00, '2025-10-18 23:08:56', 'Pending');
 
 -- --------------------------------------------------------
 
@@ -76,8 +95,10 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `description`, `price`, `created_at`, `updated_at`) VALUES
-(1, 'Refill', 'Bring your own empty container. This is for the water only.', 20.00, '2025-10-17 14:55:56', '2025-10-17 14:55:56'),
-(2, 'New Container', 'Includes a brand new 5-gallon container + the first refill.', 120.00, '2025-10-17 14:55:56', '2025-10-17 14:55:56');
+(3, 'Standard Round Refill', 'Bring your own existing Standard Round 5-gallon container for this water refill.', 20.00, '2025-10-18 11:39:05', '2025-10-18 11:39:05'),
+(4, 'Slim Container Refill', 'Bring your own existing Slim Container with Faucet for this water refill.', 20.00, '2025-10-18 11:39:05', '2025-10-18 11:39:05'),
+(5, 'New Standard Round', 'Includes a brand new Standard Round 5-gallon container + the first water refill.', 120.00, '2025-10-18 11:39:05', '2025-10-18 11:39:05'),
+(6, 'New Slim Container', 'Includes a brand new Slim Container with Faucet + the first water refill.', 120.00, '2025-10-18 11:39:05', '2025-10-18 11:39:05');
 
 -- --------------------------------------------------------
 
@@ -93,26 +114,26 @@ CREATE TABLE `users` (
   `phone_number` varchar(20) NOT NULL,
   `address_barangay` varchar(100) NOT NULL,
   `address_detail` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `is_admin` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `full_name`, `email`, `password_hash`, `phone_number`, `address_barangay`, `address_detail`, `created_at`) VALUES
-(1, 'Maling Tinapa', 'malingtinapa@gmail.com', '$2y$10$gmsQFZm3ksuh23kdQikCyOd4Irf12WqRZg3Qz8gkvJaAw638lY02e', '09958344063', 'Cataguingtingan', 'Barangay House Municipality', '2025-10-17 13:46:36');
+INSERT INTO `users` (`id`, `full_name`, `email`, `password_hash`, `phone_number`, `address_barangay`, `address_detail`, `created_at`, `is_admin`) VALUES
+(1, 'Maling Tinapa', 'malingtinapa@gmail.com', '$2y$10$gmsQFZm3ksuh23kdQikCyOd4Irf12WqRZg3Qz8gkvJaAw638lY02e', '09958344063', 'Cataguingtingan', 'Barangay House Municipality', '2025-10-17 13:46:36', 0);
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `admin`
+-- Indexes for table `admins`
 --
-ALTER TABLE `admin`
-  ADD PRIMARY KEY (`admin_id`),
-  ADD UNIQUE KEY `username` (`username`),
+ALTER TABLE `admins`
+  ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
@@ -142,28 +163,28 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT for table `admin`
+-- AUTO_INCREMENT for table `admins`
 --
-ALTER TABLE `admin`
-  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `admins`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
