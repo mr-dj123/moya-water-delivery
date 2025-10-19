@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="en">
 
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,6 +12,8 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2ntuNlWwwR0z5jD9Dq0a9G" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 
     <style>
         /* --- Moya Custom CSS Theme --- */
@@ -334,23 +335,36 @@
                     <h2 class="display-6 fw-bold mb-3">Service Area: Rosario, La Union</h2>
                     <p class="lead text-secondary mb-4">
                         We proudly serve our local community in <b>Barangay Cataguingtingan</b> and surrounding <b>In-Town
-                        areas</b> only. Please check the map to ensure your location is within our service zone.
+                        areas</b> only. Check the map for our specific delivery locations.
                     </p>
-                    <button onclick="openLoginModal('check-location')" class="btn btn-primary rounded-pill fw-semibold">
+                    <button onclick="openLocationCheckModal()" class="btn btn-primary rounded-pill fw-semibold">
                         Confirm My Delivery Address
                     </button>
                 </div>
-                <div class="col-lg-6">
-                    <!-- Map Placeholder -->
-                    <div class="map-placeholder rounded-4 card-shadow">
-                        <p class="fw-bold text-primary">MAP INTEGRATION (Placeholder)<br><span
-                                class="fw-normal small text-secondary">Google Maps API will be used here to confirm
-                                location during checkout.</span></p>
-                    </div>
+                <div class="col-lg-6 h-100">
+                    <div id="main-page-map" class="map-placeholder rounded-4 card-shadow" style="height: 400px;"></div>
                 </div>
             </div>
         </div>
     </section>
+    
+    <div class="modal fade" id="locationCheckModal" tabindex="-1" aria-labelledby="locationCheckModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="locationCheckModalLabel">Checking Your Delivery Location</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted">This feature is only available for registered users. Please login first.
+                       The <span class="text-success fw-bold">green pin</span> is your barangay, and the <span class="text-primary fw-bold">blue pins</span> are our delivery points.
+                    </p>
+                    <div id="location-check-map" class="mb-3"></div>
+                    <div id="locationStatus" class="mt-3 text-center fw-bold"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="bg-primary text-white py-4 mt-auto">
@@ -359,13 +373,12 @@
         </div>
     </footer>
 
-
     <!-- Authentication Modal (Login/Signup Pop-up) - REQUIRED TO ORDER -->
     <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content rounded-4 card-shadow">
                 <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold text-gray-800 fs-3" id="authModalLabel " style="color: var(--moya-primary) !important;">Welcome to Moya!</h5>
+                    <h5 class="modal-title fw-bold text-gray-800 fs-3" id="authModalLabel" style="color: var(--moya-primary) !important;">Welcome to Moya!</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -520,11 +533,139 @@
 
     <!-- Bootstrap JS (required for modals and responsiveness) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
     <script>
-        // --- Modal Control Functions (Simplified for interaction) ---
+        // --- GLOBAL VARIABLES ---
+        
+        // This is your complete list of 28 delivery points (the BLUE pins).
+        const serviceAreaPoints = [
+            [16.219468, 120.493981], [16.213475, 120.501831], [16.225049, 120.503922],
+            [16.246571, 120.487866], [16.239948, 120.468656], [16.228787, 120.459740],
+            [16.238981, 120.455706], [16.248206, 120.453848], [16.255083, 120.469280],
+            [16.265017, 120.445564], [16.224417, 120.450107], [16.220696, 120.468793],
+            [16.214975, 120.468423], [16.214365, 120.491307], [16.211052, 120.484091],
+            [16.236634, 120.431094], [16.234697, 120.421645], [16.232188, 120.407840],
+            [16.220671, 120.412298], [16.242430, 120.404603], [16.250993, 120.429892],
+            [16.266720, 120.408259], [16.281248, 120.443265], [16.268898, 120.475935],
+            [16.249906, 120.495360], [16.277226, 120.489522], [16.281798, 120.488149],
+            [16.214498, 120.429782]
+        ];
+
+        // --- BARANGAY COORDINATE LOOKUP TABLE ---
+        // You need to fill this with actual coordinates from your serviceAreaPoints
+        const barangayCoordinateLookup = {
+            // Example coordinates - REPLACE THESE WITH ACTUAL COORDINATES FROM YOUR serviceAreaPoints
+            "Cataguingtingan": [16.239948, 120.468656],
+            "Poblacion East": [16.213475, 120.501831],
+            "Poblacion West": [16.225049, 120.503922],
+            "Bani": [16.246571, 120.487866],
+            // Add more barangays as needed...
+        };
+
+        // Default user barangay for demo purposes
+        // In a real implementation, this would come from your PHP backend
+        const USER_BARANGAY_NAME = "Cataguingtingan";
+
+        let modalMap; // To hold the map instance for the modal
+        let userMarker; // To hold the user's location marker
+
+        // --- INITIALIZE MAIN PAGE MAP ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const mainMap = L.map('main-page-map').setView([16.245, 120.47], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(mainMap);
+
+            serviceAreaPoints.forEach(coords => {
+                L.marker(coords).addTo(mainMap).bindPopup('This is within our delivery area. We can deliver here!');
+            });
+        });
+
+        // --- MODAL AND LOCATION CHECKING LOGIC ---
+        const locationModalElement = document.getElementById('locationCheckModal');
+        const locationModal = new bootstrap.Modal(locationModalElement);
+        
+        // This function is called by the "Confirm My Delivery Address" button
+        function openLocationCheckModal() {
+            locationModal.show();
+        }
+        
+        // Initialize map AND run check ONLY after the modal has been shown
+        locationModalElement.addEventListener('shown.bs.modal', function() {
+            if (!modalMap) { // Initialize map only once
+                modalMap = L.map('location-check-map').setView([16.245, 120.47], 13);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(modalMap);
+                
+                // Add all BLUE service area markers to the modal map
+                serviceAreaPoints.forEach(coords => {
+                    L.marker(coords).addTo(modalMap);
+                });
+            }
+            modalMap.invalidateSize(); // Fixes map sizing
+            
+            // --- Automatically check the user's profile barangay ---
+            checkProfileBarangay();
+        });
+
+        function checkProfileBarangay() {
+            const statusDiv = document.getElementById('locationStatus');
+            statusDiv.className = 'mt-3 text-center fw-bold'; // Reset class
+            statusDiv.innerHTML = ""; // Clear old text
+
+            // 1. Find the coordinates for the user's registered barangay
+            const userCoords = barangayCoordinateLookup[USER_BARANGAY_NAME];
+
+            if (userCoords) {
+                // 2. We found the barangay in our lookup table.
+                
+                // Add or move the user's GREEN marker
+                if (!userMarker) {
+                     userMarker = L.marker(userCoords, {
+                        icon: L.icon({
+                            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+                            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                            iconSize: [25, 41],
+                            iconAnchor: [12, 41],
+                            popupAnchor: [1, -34],
+                            shadowSize: [41, 41]
+                        })
+                    }).addTo(modalMap);
+                } else {
+                    userMarker.setLatLng(userCoords);
+                }
+                
+                modalMap.setView(userCoords, 15); // Center map on user's barangay
+                userMarker.bindPopup('<b>Your Registered Barangay:</b><br>' + USER_BARANGAY_NAME).openPopup();
+
+                // 3. Check if these coordinates are in our delivery zone
+                if (isInsideDeliveryZone(userCoords)) {
+                    statusDiv.innerHTML = '<span class="text-danger">This feature is only available for registered users. Please login first.</span>';
+                } else {
+                    statusDiv.innerHTML = '<span class="text-danger">This feature is only available for registered users. Please login first.</span>';
+                }
+
+            } else {
+                // 4. We could not find the barangay name in our lookup table.
+                statusDiv.innerHTML = '<span class="text-danger">Sorry, we could not find your barangay "' + USER_BARANGAY_NAME + '" in our system. Please check your profile address.</span>';
+            }
+        }
+
+        // This function checks if the user's coords are "close enough" to any service point
+        function isInsideDeliveryZone(userCoords) {
+            // This checks if the user's coordinates are *exactly* one of the service points.
+            // This is safer than a radius check.
+            for (const point of serviceAreaPoints) {
+                if (point[0] === userCoords[0] && point[1] === userCoords[1]) {
+                    return true; // The user's barangay is one of the service points
+                }
+            }
+            return false; // Not found in the list
+        }
+
+        // --- Modal Control Functions ---
         const authModalElement = document.getElementById('authModal');
         const myAuthModal = new bootstrap.Modal(authModalElement);
 
@@ -541,58 +682,49 @@
             return true; // Allows the form to submit to login.php
         }
 
-        (function () {
-            'use strict'
-            const forms = document.querySelectorAll('.needs-validation')
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-                    form.classList.add('was-validated')
-                }, false)
-            })
-        })()
+        // Form validation
         (function () {
             'use strict';
-            const form = document.querySelector('.needs-validation');
-            const inputs = form.querySelectorAll('input, select');
+            const forms = document.querySelectorAll('.needs-validation');
+            
+            Array.from(forms).forEach(form => {
+                const inputs = form.querySelectorAll('input, select');
 
-            // Prevent submission if invalid
-            form.addEventListener('submit', event => {
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-            }, false);
-
-            // Real-time validation while typing or changing
-            inputs.forEach(input => {
-                input.addEventListener('input', () => {
-                    if (input.checkValidity()) {
-                        input.classList.remove('is-invalid');
-                        input.classList.add('is-valid');
-                    } else {
-                        input.classList.remove('is-valid');
-                        input.classList.add('is-invalid');
+                // Prevent submission if invalid
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
                     }
-                });
+                    form.classList.add('was-validated');
+                }, false);
 
-                input.addEventListener('blur', () => {
-                    if (input.value.trim() !== '') {
+                // Real-time validation while typing or changing
+                inputs.forEach(input => {
+                    input.addEventListener('input', () => {
                         if (input.checkValidity()) {
-                            input.classList.add('is-valid');
                             input.classList.remove('is-invalid');
+                            input.classList.add('is-valid');
                         } else {
-                            input.classList.add('is-invalid');
                             input.classList.remove('is-valid');
+                            input.classList.add('is-invalid');
                         }
-                    }
+                    });
+
+                    input.addEventListener('blur', () => {
+                        if (input.value.trim() !== '') {
+                            if (input.checkValidity()) {
+                                input.classList.add('is-valid');
+                                input.classList.remove('is-invalid');
+                            } else {
+                                input.classList.add('is-invalid');
+                                input.classList.remove('is-valid');
+                            }
+                        }
+                    });
                 });
             });
-        })();     
+        })();
     </script>
 
 </body>
