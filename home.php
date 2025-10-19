@@ -50,19 +50,21 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
             background-image: linear-gradient(to bottom right, #ffffff, var(--moya-bg));
         }
         .btn-cta {
-            background-color: var(--moya-cta);
-            border-color: var(--moya-cta);
-            color: #fff;
+            background-color: #007bff; /* Primary Blue */
+            border-color: #007bff;
+            color: #fff !important;
             font-weight: 700;
             padding: .75rem 2rem;
-            box-shadow: 0 4px 10px rgba(255, 153, 0, 0.4);
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
             transition: all 0.3s ease;
         }
+
         .btn-cta:hover {
-            background-color: #e68a00;
-            border-color: #e68a00;
+            background-color: #0056b3; /* Darker blue on hover */
+            border-color: #0056b3;
+            color: #fff !important; /* Keep text white on hover */
+            box-shadow: 0 10px 20px rgba(0, 123, 255, 0.5) !important;
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 153, 0, 0.6);
         }
         .card-shadow {
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 15px rgba(0, 0, 0, 0.03);
