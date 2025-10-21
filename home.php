@@ -114,7 +114,7 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="profileDropdown">
                             <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                            <li><a class="dropdown-item" href="orders.php">My Orders</a></li>
+                            <li><a class="dropdown-item" href="order.php">Order Here</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-danger fw-semibold" href="logout.php">Logout</a></li>
                         </ul>

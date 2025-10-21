@@ -129,7 +129,7 @@ if ($success_count > 0) {
     // Success: Redirect to a confirmation page with summary data
     $_SESSION['order_success'] = true;
     $_SESSION['order_total'] = number_format($total_charged_amount, 2);
-    $_SESSION['order_item_count'] = $success_count;
+    $_SESSION['order_item_count'] = $total_overall_quantity;
     
     // In a real application, you would generate a single order ID, but here 
     // we use the total amount and count for the confirmation message.

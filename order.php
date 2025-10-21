@@ -171,7 +171,7 @@ mysqli_close($conn);
                         </svg>
                         Profile
                     </a>
-                    <a href="logout.php" class="btn btn-danger">Log Out</a>
+                    <a href="home.php" class="btn btn-primary">Home</a>
                 </div>
             </div>
 

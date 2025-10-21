@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
                             $_SESSION["full_name"] = $full_name;
-                            $_SESSION["is_admin"] = 1;
+
                             
                             header("location: dashboard.php");
                             exit;
@@ -111,7 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="login-card">
         <div class="login-card-header">
-            <h1>Admin Panel</h1>
+            <h1>Moya Admin Panel</h1>
             <p>Please sign in to continue</p>
         </div>
 
@@ -137,14 +137,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
                     <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
                 </div>
-            </div>
-
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="rememberMe">
-                    <label class="form-check-label" for="rememberMe">Remember me</label>
-                </div>
-                <a href="#" class="text-decoration-none" style="color: var(--primary-color);">Forgot password?</a>
             </div>
 
             <div class="d-grid">
